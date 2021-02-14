@@ -1,7 +1,7 @@
 Node Cache Manager store for Hasura GraphQL engine
 ==================================
 
-[![Codacy Badge](https://api.codacy.com/project/badge/c865d138d52541f8845090ed3992357a)](https://www.codacy.com/app/valerio-cavagni/node-cache-manager-mongodb) [![Dependency Status](https://david-dm.org/v4l3r10/node-cache-manager-mongodb.svg)](https://david-dm.org/v4l3r10/node-cache-manager-mongodb)
+[![Test with Github Actions](https://github.com/euknyaz/node-cache-manager-hasura/workflows/node-cache-manager-hasura/badge.svg)](https://github.com/euknyaz/node-cache-manager-hasura/actions?query=workflow%3Anode-cache-manager-hasura)
 
 The Hasura store for the [node-cache-manager](https://github.com/BryanDonovan/node-cache-manager) module. 
 
