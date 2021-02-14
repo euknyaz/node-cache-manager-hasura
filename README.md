@@ -59,9 +59,9 @@ var cache = cacheManager.caching({
     store : hasuraStore,
     uri : "http://localhost:3001/v1/graphql",
     options : {
-      adminSecret : "<HASURA-ADMIN-SECRET>",
+      secret : "secret", // from env HASURA_GRAPHQL_ADMIN_SECRET
       compression : false,
-      ttl : 600,
+      ttl : 600, // default "time to live" for cache records
     }
   });
 

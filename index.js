@@ -3,12 +3,8 @@
 /**
  * Module dependencies.
  */
-
-Promise = require('bluebird');
-const validOptionNames = ['HASURA_GRAPHQL_ADMIN_SECRET'];
-
 const fetch = require('node-fetch')
-//const graphqlPrint = require('graphql/language/printer').print
+Promise = require('bluebird');
 
 /**
  * HasuraStore constructor.
@@ -26,8 +22,8 @@ class HasuraStore {
     store.options.ttl = (store.options.ttl) ? store.options.ttl : 60 * 1000;
     store.options.promiseLibrary = Promise;
     store.name = 'hasura';
+    store.coll = 'cache';
     store.expireKey = 'expiresAt';
-    //store.coll = store.options.collection || 'cacheman';
     store.compression = store.options.compression || false;
     return this;
   }
@@ -44,7 +40,7 @@ class HasuraStore {
     const fetchPromise = fetch(store.uri, {
       method: 'POST',
       body: JSON.stringify({ query, variables }),
-      headers: { headers, ...{ 'x-hasura-admin-secret': store.options.HASURA_GRAPHQL_ADMIN_SECRET}},
+      headers: { headers, ...{ 'x-hasura-admin-secret': store.options.secret}},
     }).then((data) => {
       return data.json()
     }).catch(err => {

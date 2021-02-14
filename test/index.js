@@ -12,7 +12,7 @@ describe('node-cache-manager-hasura', function () {
     s = store.create({
       uri: hasuraEndpointUrl,
       options: {
-        HASURA_GRAPHQL_ADMIN_SECRET: process.env.HASURA_GRAPHQL_ADMIN_SECRET,
+        secret: process.env.HASURA_GRAPHQL_ADMIN_SECRET,
         ttl: 0.1
       }
     });
@@ -21,7 +21,7 @@ describe('node-cache-manager-hasura', function () {
     }, 500);
   });
 
-  after('cleanu', function () {
+  after('cleanup', function () {
     s.reset();
     process.exit(0);
   });
@@ -29,7 +29,11 @@ describe('node-cache-manager-hasura', function () {
   it('check expiry with 1s ttl', function () {
     this.timeout(30000);
     return s.set('test-cookie-1', 'test-user', {
-      ttl: 1
+      ttl: 2
+    }).then(() => {
+      return s.get('test-cookie-1');
+    }).then((v) => {
+      assert.strictEqual('test-user', v);
     }).delay(5000)
       .then(() => {
         return s.get('test-cookie-1')
@@ -55,10 +59,12 @@ describe('node-cache-manager-hasura', function () {
       ttl: 10000
     }).then(() => {
       return s.del('test-cookie-4');
+    }).then((v) => {
+      assert.ok(v); // first delete should succeed
     }).then(() => {
       return s.get('test-cookie-4');
     }).then((v) => {
-      assert.ok(!v);
+      assert.ok(!v); // second delete should fail
     })
   });
 
@@ -70,13 +76,18 @@ describe('node-cache-manager-hasura', function () {
       s.set('test-cookie-2', 'test-cookie-2', { ttl: 60000 }),
       s.set('test-user', 'test-user', { ttl: 60000 })])
       .then(() => {
-        return s.reset();
-      }).then(() => {
         return s.keys();
-      }).then((res) => {
-        return res.length;
-      }).then((keysCountAfterReset) => {
-        assert.ok(!!!keysCountAfterReset);
+      }).then((keys) => {
+        // we should have keys in cache before reset
+        assert.ok(keys.length > 0);
+      }).then(() => {
+        return s.reset();
+      }).then((reset) => {
+        assert.ok(reset === true);
+        return s.keys();
+      }).then((keys) => {
+        // make sure no keys in cache after reset
+        assert.ok(keys.length === 0);
       })
   });
 
