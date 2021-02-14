@@ -1,4 +1,4 @@
-name: node-cache-manager-hasura 
+name: node-cache-manager-hasura
 on: push
 jobs:
   test:
@@ -8,4 +8,4 @@ jobs:
       - name: Build the stack
         run: docker-compose up -d
       - name: Test
-        run: docker-compose run hasura-node-test sh -c "npm install && npm test"
+        run: docker-compose run --rm hasura-node-test sh -c "npm install && npm test"
