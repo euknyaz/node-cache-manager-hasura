@@ -1,0 +1,31 @@
+{
+  "name": "cache-manager-hasura",
+  "version": "0.1.0",
+  "description": "HasuraDB GraphQL store for the node-cache-manager",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/euknyaz/node-cache-manager-hasura.git"
+  },
+  "keywords": [
+    "cache",
+    "hasura",
+    "graphql",
+    "cache manager",
+    "multiple cache"
+  ],
+  "author": "Eugene Knyazkov <euknyaz@gmail.com> (https://github.com/euknyaz/)",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.3",
+    "cache-manager": "^3.4.0",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "cache-manager": "^3.4.0",
+    "mocha": "^8.2.1"
+  }
+}

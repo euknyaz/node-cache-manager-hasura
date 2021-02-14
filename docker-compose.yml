@@ -1,0 +1,57 @@
+version: '2.1'
+
+services:
+
+  hasura-postgres:
+    container_name: hasura-postgres
+    image: postgres:12-alpine
+    restart: always
+    volumes:
+    - ./var/pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: pgpasswd
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  hasura-graphql:
+    container_name: hasura-graphql
+    image: hasura/graphql-engine:v1.3.3.cli-migrations-v2
+    ports:
+    - "8080:8080"
+    depends_on:
+      hasura-postgres:
+        condition: service_healthy
+    restart: always
+    working_dir: /tmp/hasura-project
+    volumes:
+      - ./hasura/seeds:/tmp/hasura-project/seeds
+      # the following two volumes allows to apply migratins and metadata on start of hasura (with image: *.cli-migrations-v2)
+      - ./hasura/migrations:/hasura-migrations
+      - ./hasura/metadata:/hasura-metadata
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:pgpasswd@hasura-postgres:5432/postgres
+      HASURA_GRAPHQL_MIGRATIONS_SERVER_PORT: "8080"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ADMIN_SECRET: secret
+      HASURA_GRAPHQL_ENABLE_TELEMETRY: "false"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+
+  hasura-node-test:
+    container_name: hasura-node-test
+    image: node:14-alpine
+    depends_on:
+      - hasura-graphql
+    volumes:
+    - ./:/home/node
+    environment:
+      HASURA_GRAPHQL_API_ENDPOINT: "http://hasura-graphql:8080/v1/graphql"
+      HASURA_GRAPHQL_ADMIN_SECRET: "secret"
+    working_dir: /home/node
+    entrypoint: []
+    # just return true to let docker-compose services start and then change command to run actual tests 
+    # command: ["sh", "-c" , "npm install && npm test "]
+    command: [ "true" ]

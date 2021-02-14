@@ -1,0 +1,7 @@
+- table:
+    schema: public
+    name: cache
+  configuration:
+    custom_root_fields: {}
+    custom_column_names:
+      expires_at: expiresAt
