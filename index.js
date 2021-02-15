@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 const fetch = require('node-fetch')
+const zlib = require('zlib');
 Promise = require('bluebird');
 
 /**

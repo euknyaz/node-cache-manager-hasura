@@ -1,6 +1,6 @@
 {
   "name": "cache-manager-hasura",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "HasuraDB GraphQL store for the node-cache-manager",
   "main": "index.js",
   "scripts": {

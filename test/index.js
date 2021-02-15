@@ -42,6 +42,18 @@ describe('node-cache-manager-hasura', function () {
       });
   });
 
+  it('check set with compression', function () {
+    this.timeout(5000);
+    return s.set('test-cookie-3', 'test-user', {
+      ttl: 10,
+      compression: true  
+    }).then(() => {
+      return s.get('test-cookie-3');
+    }).then((v) => {
+      assert.strictEqual('test-user', v);
+    });
+  });
+
   it('check get', function () {
     this.timeout(5000);
     return s.set('test-cookie-3', 'test-user', {
